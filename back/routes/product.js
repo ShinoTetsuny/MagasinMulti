@@ -11,3 +11,5 @@ router.get('/category/:category', productController.getProductsByCategory);
 router.get('/owner/:owner', productController.getProductsByOwner);
 router.put('/:id', productController.updateProduct);
 router.delete('/:id', productController.deleteProduct);
+
+module.exports = router;

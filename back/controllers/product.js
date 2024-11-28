@@ -82,7 +82,7 @@ exports.getProductsByCategory = (req, res, next) => {
         .catch(err => res.status(400).json(err));
 }
 
-exports.getProductByOwner = (req, res, next) => {
+exports.getProductsByOwner = (req, res, next) => {
     Product.find({ owner: req.user._id })
         .populate('category')
         .then(products => res.status(200).json(products))

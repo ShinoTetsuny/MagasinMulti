@@ -14,9 +14,15 @@ exports.getCategories = (req, res, next) => {
         .catch(err => res.status(400).json(err));
 }
 
+// GetCategory function, if empty, return 404
 exports.getCategory = (req, res, next) => {
     Category.findById(req.params.id)
-        .then(category => res.status(200).json(category))
+        .then(category => {
+            if (!category) {
+                return res.status(404).json('Category not found');
+            }
+            res.status(200).json(category);
+        })
         .catch(err => res.status(400).json(err));
 }
 
@@ -28,6 +34,6 @@ exports.updateCategory = (req, res, next) => {
 
 exports.deleteCategory = (req, res, next) => {
     Category.findByIdAndDelete(req.params.id)
-        .then(() => res.status(204).send())
+        .then(() => res.status(204).json('Category deleted'))
         .catch(err => res.status(400).json(err));
 }
