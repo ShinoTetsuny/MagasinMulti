@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { jwtDecode } from "jwt-decode";
-import { searchProducts } from '../lib/service';
+import { searchProducts, deleteProduct } from '../lib/service';
 import DetailProduct from './DetailProduct';
 
 const SearchProduct = ({ filterMode, predefinedFilters }) => {
@@ -54,6 +54,15 @@ const SearchProduct = ({ filterMode, predefinedFilters }) => {
         } finally {
             setLoading(false);
         }
+    };
+  
+    const handleDelete = async (id) => {
+      try {
+        await deleteProduct(id);
+        fetchProducts();
+      } catch (err) {
+        console.error(err);
+      }
     };
 
     useEffect(() => {

@@ -160,3 +160,16 @@ export async function searchProducts(filters){
     return error
   }
 }
+
+export async function deleteProduct(id){
+  try {
+    const resp = await api.delete(`/product/${id}`, {
+      headers : {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      }
+    })
+    return resp
+  } catch (error) {
+    return error
+  }
+}
