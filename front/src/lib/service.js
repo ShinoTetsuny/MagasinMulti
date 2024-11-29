@@ -40,3 +40,37 @@ export async function getAllUsers() {
     return error;
   }
 }
+
+export async function deleteUser(id) {
+  try {
+    const resp = await api.delete(`user/${id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    return resp;
+  } catch (error) {
+    return error;
+  }
+}
+
+export async function updateUser(id, data) {
+  try {
+    const resp = await api.put(
+      `user/${id}`,
+      {
+        username: data.username,
+        email: data.email,
+        password: data.password,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    return resp;
+  } catch (error) {
+    return error;
+  }
+}
