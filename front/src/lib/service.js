@@ -116,3 +116,30 @@ export async function createProducts(data) {
     return error;
   }
 }
+
+
+export async function getAllCategory(){
+  try {
+    const resp = await api.get('/category', {
+      headers : {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      }
+    })
+    return resp
+  } catch (error) {
+    return error
+  }
+}
+
+export async function deleteCategory(id){
+  try {
+    const resp = await api.delete(`/category/${id}`, {
+      headers : {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      }
+    })
+    return resp
+  } catch (error) {
+    return error
+  }
+}

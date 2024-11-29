@@ -1,8 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Category from "../components/Category/category";
+import { getAllCategory } from "../lib/service";
+import FormCat from "../components/Category/formAdd";
 
 function UserDashBoard() {
   const [activeTab, setActiveTab] = useState("products"); // Onglet actif
-
+  const [categories, setCategories] = useState([]);
+  const handleCategory = async () => {
+    try {
+      const resp = await getAllCategory();
+      console.log(resp);
+      setCategories(resp.data);
+    } catch (error) {
+      return error;
+    }
+  };
+  const handleNewCategory = (newCategory) => {
+    setCategories((prevCategories) => [...prevCategories, newCategory]);
+  };
+  const handleDeleteCategory = (id) => {
+    setCategories((prevCategories) =>
+      prevCategories.filter((category) => category._id !== id)
+    );
+  };
+  useEffect(() => {
+    handleCategory();
+  }, []);
   return (
     <main className="min-h-screen bg-gray-100">
       {/* Header */}
@@ -12,9 +35,7 @@ function UserDashBoard() {
           <nav>
             <button
               className={`px-4 py-2 rounded ${
-                activeTab === "products"
-                  ? "bg-blue-800"
-                  : "hover:bg-blue-700"
+                activeTab === "products" ? "bg-blue-800" : "hover:bg-blue-700"
               }`}
               onClick={() => setActiveTab("products")}
             >
@@ -22,9 +43,7 @@ function UserDashBoard() {
             </button>
             <button
               className={`ml-2 px-4 py-2 rounded ${
-                activeTab === "addProduct"
-                  ? "bg-blue-800"
-                  : "hover:bg-blue-700"
+                activeTab === "addProduct" ? "bg-blue-800" : "hover:bg-blue-700"
               }`}
               onClick={() => setActiveTab("addProduct")}
             >
@@ -32,9 +51,7 @@ function UserDashBoard() {
             </button>
             <button
               className={`ml-2 px-4 py-2 rounded ${
-                activeTab === "categories"
-                  ? "bg-blue-800"
-                  : "hover:bg-blue-700"
+                activeTab === "categories" ? "bg-blue-800" : "hover:bg-blue-700"
               }`}
               onClick={() => setActiveTab("categories")}
             >
@@ -134,32 +151,16 @@ function UserDashBoard() {
             <h2 className="text-xl font-bold mb-4">Manage Categories</h2>
             <div className="bg-white shadow rounded-lg p-6">
               <ul className="list-disc pl-4">
-                <li className="mb-2 flex justify-between">
-                  <span>Category 1</span>
-                  <button className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">
-                    Delete
-                  </button>
-                </li>
-                <li className="mb-2 flex justify-between">
-                  <span>Category 2</span>
-                  <button className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">
-                    Delete
-                  </button>
-                </li>
+                {categories &&
+                  categories.map((category) => (
+                    <Category
+                      key={category._id}
+                      data={category}
+                      onDeleteCategory={handleDeleteCategory}
+                    />
+                  ))}
               </ul>
-              <form className="mt-6">
-                <input
-                  type="text"
-                  className="w-full p-2 border rounded mb-4"
-                  placeholder="Add a new category"
-                />
-                <button
-                  type="submit"
-                  className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                >
-                  Add Category
-                </button>
-              </form>
+              <FormCat onNewCategory={handleNewCategory} />
             </div>
           </section>
         )}

@@ -34,7 +34,9 @@ root.render(
     <Routes>
       <Route path="/" element={<App />} />
       <Route path="/admin" element={<Admin/>}/>
-      <Route path="/dashboard" element={isAuthentified() ? <Dashboard /> : <Navigate to="/admin" /> } />
+      <Route path="/dashboard" element={isAdmin() ? <Dashboard /> : <Navigate to="/admin" /> } />
+      <Route path="/user" element={<User />} />
+      <Route path="/user-dashboard" element={isAuthentified() ? <UserDashBoard /> : <Navigate to="/" /> } />
     </Routes>
   </BrowserRouter>
 );
