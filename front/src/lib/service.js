@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import { jwtDecode } from "jwt-decode";
 const api = axios.create({
   baseURL: "http://localhost:5000",
 });
@@ -94,6 +94,12 @@ export async function createCategory(data) {
   }
 }
 export async function createProducts(data) {
+  console.log(data.stock)
+  const token = data.owner
+  if(token){
+    const decoded = jwtDecode(token);
+    data.owner = decoded.id
+  }
   try {
     const resp = await api.post(
       "/product",
@@ -102,7 +108,7 @@ export async function createProducts(data) {
         name: data.name,
         description: data.description,
         price: data.price,
-        stock: data,
+        stock: data.stock,
         category: data.category,
       },
       {

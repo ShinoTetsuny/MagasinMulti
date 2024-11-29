@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Category from "../components/Category/category";
 import { getAllCategory } from "../lib/service";
 import FormCat from "../components/Category/formAdd";
+import FormAddProducts from "../components/Products/formAdd";
 
 function UserDashBoard() {
   const [activeTab, setActiveTab] = useState("products"); // Onglet actif
@@ -90,58 +91,7 @@ function UserDashBoard() {
         {activeTab === "addProduct" && (
           <section>
             <h2 className="text-xl font-bold mb-4">Add a New Product</h2>
-            <form className="bg-white shadow rounded-lg p-6">
-              <div className="mb-4">
-                <label
-                  htmlFor="productName"
-                  className="block text-gray-700 font-bold"
-                >
-                  Product Name
-                </label>
-                <input
-                  type="text"
-                  id="productName"
-                  className="w-full mt-2 p-2 border rounded"
-                  placeholder="Enter product name"
-                />
-              </div>
-              <div className="mb-4">
-                <label
-                  htmlFor="productPrice"
-                  className="block text-gray-700 font-bold"
-                >
-                  Product Price
-                </label>
-                <input
-                  type="number"
-                  id="productPrice"
-                  className="w-full mt-2 p-2 border rounded"
-                  placeholder="Enter product price"
-                />
-              </div>
-              <div className="mb-4">
-                <label
-                  htmlFor="productCategory"
-                  className="block text-gray-700 font-bold"
-                >
-                  Category
-                </label>
-                <select
-                  id="productCategory"
-                  className="w-full mt-2 p-2 border rounded"
-                >
-                  <option>Select a category</option>
-                  <option>Category 1</option>
-                  <option>Category 2</option>
-                </select>
-              </div>
-              <button
-                type="submit"
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-              >
-                Add Product
-              </button>
-            </form>
+            <FormAddProducts />
           </section>
         )}
 
