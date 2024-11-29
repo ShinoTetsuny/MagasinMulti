@@ -20,7 +20,6 @@ const SearchProduct = ({ filterMode, predefinedFilters }) => {
 
         try {
             const decoded = jwtDecode(token);
-            console.log(decoded)
             return decoded?.id || null; // Adaptez en fonction de votre payload JWT
         } catch (error) {
             console.error('Invalid token:', error);
@@ -47,7 +46,6 @@ const SearchProduct = ({ filterMode, predefinedFilters }) => {
             }
 
             const data = await searchProducts(currentFilters);
-            console.log(data.data)
             setProducts(data.data);
         } catch (err) {
             setError(err.message);
@@ -171,7 +169,7 @@ const SearchProduct = ({ filterMode, predefinedFilters }) => {
             <div className="product-list grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {loading && <p className="text-center text-gray-500">Chargement...</p>}
                 {error && <p className="text-center text-red-500">{error}</p>}
-                {!loading && products.length === 0 && filterMode !== "byOwner" && (
+                {!loading && products ? products.length === 0 : true && filterMode !== "byOwner" && (
                     <p className="text-center text-gray-500">Aucun produit trouvé.</p>
                 )}
                 {products.map((product) => (
