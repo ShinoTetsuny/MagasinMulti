@@ -74,3 +74,12 @@ export async function updateUser(id, data) {
     return error;
   }
 }
+
+export async function searchProducts(query) {
+  try {
+    const resp = await api.get(`/product/search?${query}`);
+    return resp;
+  } catch (error) {
+    return error;
+  }
+}
