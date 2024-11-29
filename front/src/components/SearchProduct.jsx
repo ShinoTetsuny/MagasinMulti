@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { searchProducts } from '../lib/service';
+import { searchProducts, deleteProduct } from '../lib/service';
 import DetailProduct from './DetailProduct';
 
 const SearchProduct = ({ filterMode, predefinedFilters }) => {
@@ -25,6 +25,14 @@ const SearchProduct = ({ filterMode, predefinedFilters }) => {
       }
     };
   
+    const handleDelete = async (id) => {
+      try {
+        await deleteProduct(id);
+        fetchProducts();
+      } catch (err) {
+        console.error(err);
+      }
+    };
     useEffect(() => {
       fetchProducts();
     }, [filters]);
@@ -162,12 +170,14 @@ const SearchProduct = ({ filterMode, predefinedFilters }) => {
                 Propriétaire : {product.owner?.username || 'N/A'}
               </p>
               <p className="text-gray-500 mt-2">Prix : ${product.price}</p>
-              <button
+              <div className='flex flex-col gap-2'><button
                 onClick={() => openModal(product)}
                 className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
               >
                 Voir les détails
               </button>
+              <button className='text-black hover:bg-red-500 px-4 py-2 rounded-md ' onClick={() => handleDelete(product._id)}>Supprimer</button></div>
+              
             </div>
           ))}
         </div>
