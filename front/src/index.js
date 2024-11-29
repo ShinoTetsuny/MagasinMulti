@@ -5,14 +5,19 @@ import App from "./App";
 import Admin from "./view/admin";
 import Dashboard from "./view/dashboard";
 import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+
+const isAuthentified = () => {
+  return localStorage.getItem("token") !== null;
+};
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<App />} />
       <Route path="/admin" element={<Admin/>}/>
-      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/dashboard" element={isAuthentified() ? <Dashboard /> : <Navigate to="/admin" /> } />
     </Routes>
   </BrowserRouter>
 );
