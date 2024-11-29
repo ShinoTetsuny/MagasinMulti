@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import Category from "../components/Category/category";
 import { getAllCategory } from "../lib/service";
 import FormCat from "../components/Category/formAdd";
-
+import SearchProduct from "../components/SearchProduct";
+import FormAddProducts from "../components/Products/formAdd";
 function UserDashBoard() {
   const [activeTab, setActiveTab] = useState("products"); // Onglet actif
   const [categories, setCategories] = useState([]);
