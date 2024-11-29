@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { getAllUsers } from "../lib/service";
+import { getAllUsers, deleteUser, updateUser } from "../lib/service";
+import { Trash, Pen } from "lucide-react";
 
 function Dashboard() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [editingUser, setEditingUser] = useState(null); // Utilisateur en cours de modification
   const [error, setError] = useState("");
 
   const handleUsers = async () => {
@@ -15,6 +17,32 @@ function Dashboard() {
       console.error(err);
       setError("Failed to load users. Please try again later.");
       setLoading(false);
+    }
+  };
+
+  const handleUpdate = async (updatedUser) => {
+    try {
+      await updateUser(updatedUser._id, updatedUser);
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user._id === updatedUser._id ? updatedUser : user
+        )
+      );
+      setEditingUser(null); // Ferme le formulaire après la mise à jour
+    } catch (err) {
+      console.error(err);
+      setError("Failed to update user. Please try again later.");
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      setUsers((prevUsers) => prevUsers.filter((user) => user._id !== id));
+      await deleteUser(id);
+    } catch (err) {
+      console.error(err);
+      setError("Failed to delete user. Please try again later.");
+      await handleUsers();
     }
   };
 
@@ -62,12 +90,18 @@ function Dashboard() {
                     </td>
                     <td className="p-4 border border-gray-300">{user.email}</td>
                     <td className="p-4 border border-gray-300">{user.role}</td>
-                    <td className="p-4 border border-gray-300">
-                      <button className="bg-blue-500 text-white py-1 px-2 rounded hover:bg-blue-600">
-                        View
+                    <td className="p-4 border border-gray-300 flex gap-2">
+                      <button
+                        className="bg-blue-500 text-white py-2 px-2 rounded hover:bg-blue-600 flex items-center gap-1"
+                        onClick={() => setEditingUser(user)}
+                      >
+                        <Pen size={16} color="white" strokeWidth={3} />
                       </button>
-                      <button className="ml-2 bg-red-500 text-white py-1 px-2 rounded hover:bg-red-600">
-                        Delete
+                      <button
+                        className="bg-red-500 text-white py-2 px-2 rounded hover:bg-red-600 flex items-center gap-1"
+                        onClick={() => handleDelete(user._id)}
+                      >
+                        <Trash size={16} color="white" strokeWidth={3} />
                       </button>
                     </td>
                   </tr>
@@ -77,6 +111,77 @@ function Dashboard() {
           )}
         </div>
       </div>
+      {editingUser && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-6 rounded shadow-lg">
+            <h2 className="text-xl font-bold mb-4">Edit User</h2>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleUpdate(editingUser);
+              }}
+            >
+              <div className="mb-4">
+                <label className="block text-gray-700">Username</label>
+                <input
+                  type="text"
+                  className="w-full border p-2 rounded"
+                  value={editingUser.username}
+                  onChange={(e) =>
+                    setEditingUser({
+                      ...editingUser,
+                      username: e.target.value,
+                    })
+                  }
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700">Email</label>
+                <input
+                  type="email"
+                  className="w-full border p-2 rounded"
+                  value={editingUser.email}
+                  onChange={(e) =>
+                    setEditingUser({
+                      ...editingUser,
+                      email: e.target.value,
+                    })
+                  }
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700">Role</label>
+                <input
+                  type="text"
+                  className="w-full border p-2 rounded"
+                  value={editingUser.role}
+                  onChange={(e) =>
+                    setEditingUser({
+                      ...editingUser,
+                      role: e.target.value,
+                    })
+                  }
+                />
+              </div>
+              <div className="flex gap-4">
+                <button
+                  type="submit"
+                  className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
+                >
+                  Save
+                </button>
+                <button
+                  type="button"
+                  className="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600"
+                  onClick={() => setEditingUser(null)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
