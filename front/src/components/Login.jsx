@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { login } from "../lib/service";
 import { useState } from "react";
 function Login() {
@@ -8,6 +8,7 @@ function Login() {
   });
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
+  const location = useLocation()
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUser({ ...user, [name]: value });
@@ -22,7 +23,11 @@ function Login() {
       localStorage.setItem("token", resp.data.token);
       // Rediriger après un court délai
       setTimeout(() => {
-        navigate("/dashboard"); // Utilisation de `navigate` pour la redirection
+        if (location.pathname.includes("admin")) {
+          navigate("/dashboard"); // Redirige vers le tableau de bord administrateur
+        } else {
+          navigate("/user-dashboard"); // Redirige vers le tableau de bord utilisateur
+        }
       }, 1000);
     } catch (error) {
       console.error("Erreur lors de l'inscription :", error);

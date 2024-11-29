@@ -74,10 +74,43 @@ export async function updateUser(id, data) {
     return error;
   }
 }
-
-export async function searchProducts(query) {
+export async function createCategory(data) {
   try {
-    const resp = await api.get(`/product/search?${query}`);
+    const resp = await api.post(
+      "/category",
+      {
+        name: data.name,
+        description: data.description,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    return resp;
+  } catch (error) {
+    return error;
+  }
+}
+export async function createProducts(data) {
+  try {
+    const resp = await api.post(
+      "/product",
+      {
+        owner: data.owner,
+        name: data.name,
+        description: data.description,
+        price: data.price,
+        stock: data,
+        category: data.category,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
     return resp;
   } catch (error) {
     return error;
