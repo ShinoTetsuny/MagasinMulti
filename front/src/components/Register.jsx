@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom"; // Importer `useLocation`
 import { register } from "../lib/service";
 
 function Register() {
@@ -10,6 +10,7 @@ function Register() {
   });
   const [message, setMessage] = useState("");
   const navigate = useNavigate(); // Hook pour rediriger
+  const location = useLocation(); // Hook pour obtenir l'URL actuelle
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,9 +24,13 @@ function Register() {
       setMessage(resp.data.message);
       localStorage.setItem("token", resp.data.token);
 
-      // Rediriger après un court délai
+      // Déterminer la redirection en fonction de l'URL actuelle
       setTimeout(() => {
-        navigate("/dashboard"); // Utilisation de `navigate` pour la redirection
+        if (location.pathname.includes("admin")) {
+          navigate("/dashboard"); // Redirige vers le tableau de bord administrateur
+        } else {
+          navigate("/user-dashboard"); // Redirige vers le tableau de bord utilisateur
+        }
       }, 1000);
     } catch (error) {
       console.error("Erreur lors de l'inscription :", error);

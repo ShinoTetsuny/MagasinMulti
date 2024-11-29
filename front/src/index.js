@@ -5,6 +5,8 @@ import App from "./App";
 import Admin from "./view/admin";
 import Dashboard from "./view/dashboard";
 import reportWebVitals from "./reportWebVitals";
+import User from "./view/user";
+import UserDashBoard from "./view/userDashboard";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
@@ -32,7 +34,7 @@ root.render(
     <Routes>
       <Route path="/" element={<App />} />
       <Route path="/admin" element={<Admin/>}/>
-      <Route path="/dashboard" element={isAdmin() ? <Dashboard /> : <Navigate to="/admin" /> } />
+      <Route path="/dashboard" element={isAuthentified() ? <Dashboard /> : <Navigate to="/admin" /> } />
     </Routes>
   </BrowserRouter>
 );
