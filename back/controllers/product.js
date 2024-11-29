@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Product = require('../models/product');
 const Category = require('../models/category');
 
@@ -44,17 +45,27 @@ exports.searchProducts = async (req, res) => {
         }
 
         if (owner) {
-            // Find the user by username or email
-            const user = await User.findOne({
-                $or: [
-                    { username: new RegExp(owner, 'i') }, // Case-insensitive
-                    { email: new RegExp(owner, 'i') }
-                ]
-            });
-            if (user) {
-                filter.owner = user._id; // Use the user ID in the filter
+            if (mongoose.Types.ObjectId.isValid(owner)) {
+                // Si c'est un ObjectId valide
+                filter.owner = owner;
             } else {
-                return res.status(404).json({ error: 'Owner not found' });
+                // Chercher par username ou email
+                const user = await User.findOne({
+                    $or: [
+                        { username: new RegExp(owner, 'i') },
+                        { email: new RegExp(owner, 'i') },
+                        {_id: owner}
+                    ]
+                });
+        
+                console.log("Utilisateur trouvé : ", user); // Debugging log
+        
+                if (user) {
+                    filter.owner = user._id;
+                } else {
+                    // Aucun utilisateur trouvé
+                    return res.status(404).json({ error: `Aucun utilisateur trouvé pour le paramètre owner : ${owner}` });
+                }
             }
         }
 
@@ -67,10 +78,11 @@ exports.searchProducts = async (req, res) => {
         // Perform the search
         const products = await Product.find(filter)
             .populate('owner', 'username email') // Populate user details
-            .populate('category', 'name'); // Populate category details
+            .populate('category', 'name');      // Populate category details
+
         res.json(products);
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        res.status(400).json({ error: err.message, message: 'Error in searchProducts' });
     }
 };
 

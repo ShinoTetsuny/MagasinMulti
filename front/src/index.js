@@ -3,14 +3,40 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import Admin from "./view/admin";
+import Dashboard from "./view/dashboard";
 import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import User from "./view/user";
+import UserDashBoard from "./view/userDashboard";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+
+const isAuthentified = () => {
+  return localStorage.getItem("token") !== null;
+};
+
+const isAdmin = () => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    try {
+      const decoded = jwtDecode(token); 
+      return decoded.role === "admin"; 
+    } catch (err) {
+      console.error("Invalid token:", err);
+      return false;
+    }
+  }
+  return false;
+};
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<App />} />
       <Route path="/admin" element={<Admin/>}/>
+      <Route path="/dashboard" element={isAdmin() ? <Dashboard /> : <Navigate to="/admin" /> } />
+      <Route path="/user" element={<User />} />
+      <Route path="/user-dashboard" element={isAuthentified() ? <UserDashBoard /> : <Navigate to="/" /> } />
     </Routes>
   </BrowserRouter>
 );

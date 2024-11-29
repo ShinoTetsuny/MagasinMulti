@@ -1,6 +1,6 @@
 import Register from "../components/Register";
 import Login from "../components/Login";
-function Admin() {
+function User() {
   return (
     <main className="min-h-screen flex justify-center items-center">
       <section className="flex justify-between min-h-screen w-full">
@@ -17,4 +17,4 @@ function Admin() {
   );
 }
 
-export default Admin;
+export default User;
