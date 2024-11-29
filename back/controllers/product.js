@@ -2,9 +2,9 @@ const Product = require('../models/product');
 const Category = require('../models/category');
 
 exports.createProduct = (req, res, next) => {
-    const { name, description, price, stock, category } = req.body;
+    const { owner, name, description, price, stock, category } = req.body;
     const product = new Product({
-        owner: req.user._id,
+        owner,
         name,
         description,
         price,
@@ -76,14 +76,14 @@ exports.searchProducts = async (req, res) => {
 
 
 exports.getProductsByCategory = (req, res, next) => {
-    Product.find({ category: req.params.id })
+    Product.find({ category: req.params.category })
         .populate('category')
         .then(products => res.status(200).json(products))
         .catch(err => res.status(400).json(err));
 }
 
 exports.getProductsByOwner = (req, res, next) => {
-    Product.find({ owner: req.user._id })
+    Product.find({ owner: req.params.owner })
         .populate('category')
         .then(products => res.status(200).json(products))
         .catch(err => res.status(400).json(err));
