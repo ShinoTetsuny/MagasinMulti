@@ -44,6 +44,14 @@ function UserDashBoard() {
             </button>
             <button
               className={`ml-2 px-4 py-2 rounded ${
+                activeTab === "categories" ? "bg-blue-800" : "hover:bg-blue-700"
+              }`}
+              onClick={() => setActiveTab("myproducts")}
+            >
+              My Products
+            </button>
+            <button
+              className={`ml-2 px-4 py-2 rounded ${
                 activeTab === "addProduct" ? "bg-blue-800" : "hover:bg-blue-700"
               }`}
               onClick={() => setActiveTab("addProduct")}
@@ -67,6 +75,11 @@ function UserDashBoard() {
         {/* Produits */}
         {activeTab === "products" && (
           <SearchProduct filterMode={""}/>
+        )}
+
+        {/* Mes Produits */}
+                {activeTab === "myproducts" && (
+          <SearchProduct filterMode={"byOwner"}/>
         )}
 
         {/* Ajouter un produit */}
