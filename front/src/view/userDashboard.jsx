@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import Category from "../components/Category/category";
 import { getAllCategory } from "../lib/service";
 import FormCat from "../components/Category/formAdd";
-import FormAddProducts from "../components/Products/formAdd";
 
 function UserDashBoard() {
   const [activeTab, setActiveTab] = useState("products"); // Onglet actif
@@ -66,25 +65,7 @@ function UserDashBoard() {
       <div className="max-w-6xl mx-auto p-6">
         {/* Produits */}
         {activeTab === "products" && (
-          <section>
-            <h2 className="text-xl font-bold mb-4">All Products</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {/* Placeholder pour les produits */}
-              {[1, 2, 3, 4].map((product) => (
-                <div
-                  key={product}
-                  className="bg-white shadow rounded-lg p-4 flex flex-col items-center"
-                >
-                  <div className="w-full h-40 bg-gray-200 rounded mb-4"></div>
-                  <h3 className="text-lg font-bold">Product {product}</h3>
-                  <p className="text-gray-500 mt-2">$20.00</p>
-                  <button className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-                    View Details
-                  </button>
-                </div>
-              ))}
-            </div>
-          </section>
+          <SearchProduct filterMode={""}/>
         )}
 
         {/* Ajouter un produit */}

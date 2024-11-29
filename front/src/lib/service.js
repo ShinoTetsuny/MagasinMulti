@@ -149,3 +149,14 @@ export async function deleteCategory(id){
     return error
   }
 }
+
+export async function searchProducts(filters){
+  try {
+    const resp = await api.get('/product/search', {
+      params: filters
+    })
+    return resp
+  } catch (error) {
+    return error
+  }
+}
