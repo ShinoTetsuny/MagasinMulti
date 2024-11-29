@@ -15,3 +15,28 @@ export async function register(data) {
     return error;
   }
 }
+
+export async function login(data) {
+  try {
+    const resp = await api.post("/auth/login", {
+      email: data.email,
+      password: data.password,
+    });
+    return resp;
+  } catch (error) {
+    return error;
+  }
+}
+
+export async function getAllUsers() {
+  try {
+    const resp = api.get("/user", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    return resp;
+  } catch (error) {
+    return error;
+  }
+}
